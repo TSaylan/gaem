@@ -6,7 +6,7 @@ surface = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("")
 
 # load
-with open("save", "rt") as file:
+with open("save.txt", "rt") as file:
     line = file.readlines()
 
 for i in range(len(line)):
@@ -39,19 +39,20 @@ while RUNNING:
         player.x += 300 * deltaTime
 
     # draw stuff    
-    surface.fill((80, 80, 80))
+    surface.fill((19, 42, 19))
 
-    pygame.draw.circle(surface, (160, 160, 160), player, 50.0)
+    pygame.draw.circle(surface, (236, 243, 158), player, 50.0)
 
     # update surface
     pygame.display.flip()
     deltaTime = clock.tick(60) / 1000
 
 # save and quit
-line[0] = player.x
-line[1] = player.y
+line[0] = int(player.x)
+line[1] = int(player.y)
 
-with open("save", "wt") as file:
-    file.write('\n'.join(line))
+with open("save.txt", "wt") as file:
+    for i in range(len(line)):
+        file.writelines(str(line[i]) + "\n")
             
 pygame.quit()
