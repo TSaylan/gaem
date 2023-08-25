@@ -3,20 +3,30 @@ import pygame
 # display
 pygame.init()
 surface = pygame.display.set_mode((800, 800))
-pygame.display.set_caption("")
+pygame.display.set_caption("gaem")
 
 # load
-with open("save.txt", "rt") as file:
-    line = file.readlines()
+try:
+    with open("save.txt", "rt") as file:
+        line = file.readlines()
+
+except FileNotFoundError:
+    with open("save.txt", "wt") as file:
+        file.writelines("400\n400\n")
+    with open("save.txt", "rt") as file:
+        line = file.readlines()
+
+while len(line) < 2:
+    line.append("400\n")
 
 for i in range(len(line)):
     line[i] = line[i].strip()
-
-x = int(line[0])
-y = int(line[1])
+    if not line[i]:
+        line[i] = 0
 
 # make player
-player = pygame.Vector2(x, y)
+player = pygame.Vector2(int(line[0]), int(line[1]))
+playerRect = pygame.Rect(0, 0, 100, 100)
 
 # game loop
 clock = pygame.time.Clock()
@@ -38,14 +48,16 @@ while RUNNING:
     if key[pygame.K_d]:
         player.x += 300 * deltaTime
 
-    # draw stuff    
-    surface.fill((19, 42, 19))
+    playerRect.center = player
 
-    pygame.draw.circle(surface, (236, 243, 158), player, 50.0)
+    # draw stuff    
+    surface.fill((30, 30, 30))
+
+    pygame.draw.rect(surface, (255, 69, 0), playerRect)
 
     # update surface
     pygame.display.flip()
-    deltaTime = clock.tick(60) / 1000
+    deltaTime = clock.tick(90) / 1000
 
 # save and quit
 line[0] = int(player.x)
